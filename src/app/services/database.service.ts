@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { delay, catchError } from 'rxjs/operators';
+import { delay, catchError, tap } from 'rxjs/operators';
 
 /**
  * データベース接続を管理するサービス。
@@ -27,7 +27,7 @@ export class DatabaseService {
 
   /**
    * データベースへの接続を試みる（シミュレーション）。
-   * @returns {Promise<void>} 接続が成功した場合は完了、失敗した場合はエラーを投げる。
+   * @returns {Observable<boolean>} 接続が成功した場合はtrue、失敗した場合はエラーを投げる。
    */
   connect(): Observable<boolean> {
     console.log(`Attempting to connect to DB: ${this.user}@${this.host}:${this.port}/${this.databaseName}`);
