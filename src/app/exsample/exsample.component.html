@@ -8,7 +8,7 @@
      <!-- users$がまだ初期化されていない、またはエラー処理が必要な場合（ここではシンプルに待機メッセージ） -->
     <p>データ取得を試行しています。</p>
   } @else if (users$ | async; as users) {
-    @if (users?.length > 0) {
+    @if (users.length > 0) {
       <table class="user-table">
         <thead class="table-header">
           <tr>
