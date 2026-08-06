@@ -1,1 +1,37 @@
-<h1>Hoge</h1>
+<div class="user-list-container">
+  <h2>ユーザー一覧</h2>
+
+  <!-- DB接続状態に応じてメッセージを表示 -->
+  @if (!(dbService.connectionStatus$ | async) && !users$) {
+    <p>データベースに接続中です。しばらくお待ちください...</p>
+  } @else if (!users$ && !(dbService.connectionStatus$ | async)) {
+     <!-- 接続がまだ確立されていない場合のフォールバック -->
+    <p>データベースへの接続を試行しています。</p>
+  } @else if (users$ | async; as users) {
+    @if (users?.length > 0) {
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ユーザー名</th>
+            <th>メールアドレス</th>
+            <th>ステータス</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user.id) {
+            <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td><span [ngClass]="{'active': user.status === 'Active', 'inactive': user.status === 'Inactive'}">{{ user.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p>ユーザーデータが見つかりませんでした。</p>
+    }
+  }
+
+</div>

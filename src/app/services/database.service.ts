@@ -49,14 +49,26 @@ export class DatabaseService {
   }
 
   /**
-   * DBからデータを取得する（ダミーデータ）。
+   * DBからユーザーデータを取得する（シミュレーション）。
    */
-  getInitialData(): Observable<any[]> {
-    console.log('Fetching initial data from database...');
+  getUsers(): Observable<any[]> {
+    console.log('Fetching user data from database...');
     // 接続が確立されていることを前提とします。
     const dummyData = [
-      { id: 1, name: 'User A', status: 'Active' },
-      { id: 2, name: 'User B', status: 'Inactive' }
+      { id: 1, username: 'admin', email: 'admin@example.com', status: 'Active' },
+      { id: 2, username: 'user_b', email: 'userb@example.com', status: 'Inactive' }
+    ];
+    return of(dummyData);
+  }
+
+  /**
+   * DBから商品データを取得する（シミュレーション）。
+   */
+  getProducts(): Observable<any[]> {
+    console.log('Fetching product data from database...');
+    const dummyData = [
+      { id: 1, name: '高性能ノートPC', description: '最新世代CPUを搭載した高機能モデルです。', price: 150000.00, stock_quantity: 50 },
+      { id: 2, name: 'ワイヤレスマウス', description: 'エルゴノミクスデザインの快適なマウス。', price: 3500.00, stock_quantity: 200 }
     ];
     return of(dummyData);
   }
