@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-exsample',
@@ -8,4 +9,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './exsample.component.html',
   styleUrls: ['./exsample.component.css']
 })
-export class ExsampleComponent {}
+export class ExsampleComponent implements OnInit {
+  constructor(private titleService: Title) {}
+
+  ngOnInit(): void {
+    this.titleService.setTitle('サンプル');
+  }
+}
