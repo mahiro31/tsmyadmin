@@ -1,14 +1,14 @@
-FROM node:16-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+RUN npm install -g @angular/cli
 
+# パッケージファイルをコピーして依存関係をインストール
+COPY package*.json ./
 RUN npm install
 
-# ホストマシン上のファイルをコンテナ内にマウントします。
 VOLUME ["/app"]
-
-EXPOSE 3000
+EXPOSE 4200
 
 CMD ["npm", "start"]
