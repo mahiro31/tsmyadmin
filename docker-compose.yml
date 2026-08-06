@@ -9,6 +9,7 @@ services:
       - backend
     environment:
       - NODE_ENV=development
+      - NPM_INSTALL_PACKAGES=react react-dom @angular/core
 
   backend:
     build: ./backend
