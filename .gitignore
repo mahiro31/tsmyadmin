@@ -45,3 +45,4 @@ Thumbs.db
 
 .aider*
 package-lock.json
+.env
