@@ -4,7 +4,6 @@ WORKDIR /app
 
 RUN npm install -g @angular/cli
 
-# パッケージファイルをコピーして依存関係をインストール
 COPY package*.json ./
 RUN npm install
 
