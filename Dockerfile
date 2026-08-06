@@ -6,7 +6,8 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+# ホストマシン上のファイルをコンテナ内にマウントします。
+VOLUME ["/app"]
 
 EXPOSE 3000
 
