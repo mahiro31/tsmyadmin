@@ -19,6 +19,7 @@ services:
       - database
     environment:
       - NODE_ENV=development
+      - AUTH_METHOD=JWT
 
   database:
     image: mysql:latest
