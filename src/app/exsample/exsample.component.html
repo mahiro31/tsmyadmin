@@ -9,7 +9,7 @@
     <p>データ取得を試行しています。</p>
   } @else if (users$ | async; as users) {
     @if (users?.length > 0) {
-      <table>
+      <table class="user-table">
         <thead class="table-header">
           <tr>
             <th>ID</th>
