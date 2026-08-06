@@ -1,16 +1,16 @@
 <div class="user-list-container">
   <h2>ユーザー一覧</h2>
 
-  <!-- DB接続状態に応じてメッセージを表示 -->
-  @if (!(dbService.connectionStatus$ | async) && !users$) {
+  <!-- 接続状態の監視 -->
+  @if (!(dbService.connectionStatus$ | async)) {
     <p>データベースに接続中です。しばらくお待ちください...</p>
-  } @else if (!users$ && !(dbService.connectionStatus$ | async)) {
-     <!-- 接続がまだ確立されていない場合のフォールバック -->
-    <p>データベースへの接続を試行しています。</p>
+  } @else if (!users$) {
+     <!-- users$がまだ初期化されていない、またはエラー処理が必要な場合（ここではシンプルに待機メッセージ） -->
+    <p>データ取得を試行しています。</p>
   } @else if (users$ | async; as users) {
     @if (users?.length > 0) {
       <table>
-        <thead>
+        <thead class="table-header">
           <tr>
             <th>ID</th>
             <th>ユーザー名</th>
@@ -34,4 +34,4 @@
     }
   }
 
-</div>
+</div >
