@@ -10,6 +10,9 @@ services:
       - "4200:4200"
     environment:
       - NODE_ENV=development
+    depends_on:
+      # アプリケーションがDBに接続を試みる前に、dbサービスが起動していることを保証する
+      - db
 
   db:
     image: mysql:8.0
