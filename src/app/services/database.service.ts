@@ -10,7 +10,7 @@ import { delay, catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class DatabaseService {
-  // docker-compose.ymlのサービス名を使用
+  // docker-compose.ymlの環境変数から取得することを想定した定数定義
   private readonly host = 'db'; 
   private readonly port = 3306;
   private readonly user = 'root';
