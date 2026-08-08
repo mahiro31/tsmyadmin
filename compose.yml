@@ -1,42 +1,68 @@
 name: tsmyadmin
 
+# ----------------------------
+# 1. Services (サービス定義)
+# ----------------------------
 services:
-  app:
-    build: .
-    volumes:
-      - .:/app
-      - /app/node_modules
-    ports:
-      - "${APP_PORT}:4200"
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-    depends_on:
-      db:
-        condition: service_healthy
 
+  # 🔹 MySQLデータベースサービス
   db:
     image: mysql:8.4
-    env_file:
-      - .env
-    restart: always
+    container_name: mysql_tsmyadmin
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      # **環境変数ファイル（.env）から読み込むことを推奨**
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}       # 使用するデータベース名
+      MYSQL_USER: ${DB_USER}           # アプリケーションユーザー
+      MYSQL_PASSWORD: ${DB_PASSWORD}   # アプリケーションパスワード
     volumes:
-      - tsmyadmin_db_data:/var/lib/mysql
-      - ./docker/db/sql:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      # データ永続化のためのボリューム設定
+      - db_data_tsmyadmin:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+    ports:
+      # ホストの3306ポートを公開 (開発用)
+      - "3306:3306"
+    restart: always
 
+  # 🔹 NestJSバックエンドAPIサービス
+  backend:
+    container_name: nestjs_api
+    build:
+      context: ./backend     # backendディレクトリを見る
+      dockerfile: Dockerfile # 使用するDockerfile名
+    environment:
+      # DB接続URLを環境変数で渡す。ホスト名は 'db' (サービス名) を使うのがポイント！
+      DATABASE_URL: mysql://${DB_USER}:${DB_PASSWORD}@db:3306/${DB_NAME}?schema=public
+      NODE_ENV: development
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3001:3001" # ホストの3001ポートを内部にマッピング
+    depends_on:
+      # DBが起動してからバックエンドも立ち上がるように依存関係を設定
+      - db
+    command: npm run start:dev # 実行時のコマンドを指定
+
+  # 🔹 Next.jsフロントエンドUIサービス
+  frontend:
+    container_name: nextjs_ui
+    build:
+      context: ./frontend   # frontendディレクトリを見る
+      dockerfile: Dockerfile
+    environment:
+      # APIのURLを設定 (NestJSがコンテナ名でサービスとしてアクセス可能)
+      NEXT_PUBLIC_API_BASE_URL: http://backend:3001/api
+      NODE_ENV: development
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000" # ホストの3000ポートを内部にマッピング
+    depends_on:
+      # バックエンドが動いていれば、それも起動した状態にしておく
+      - backend
+
+# ----------------------------
+# 2. Volumes (永続化データ)
+# ----------------------------
 volumes:
-  tsmyadmin_db_data:
+  db_data_tsmyadmin: # MySQLのデータを保持するボリューム
