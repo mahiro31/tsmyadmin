@@ -35,7 +35,13 @@ export default function Home() {
             >
               Learning
             </a>{" "}
-            center.
+            center. Also check out the{" "}
+            <a
+              href="/sample"
+              className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Sample Page
+            </a>.
           </p>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
