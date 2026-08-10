@@ -18,8 +18,8 @@ RUN npm install
 
 COPY --chown=node:node . .
 
-# Next.jsのビルドコマンドを実行
-RUN npm run build
+# Next.jsのビルドコマンドを実行 (もし必要なら)
+# RUN npm run build
 
 # --- PRODUCTION STAGE ---
 FROM node:24-slim as runner

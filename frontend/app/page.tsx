@@ -35,12 +35,20 @@ export default function Home() {
             >
               Learning
             </a>{" "}
-            center. Also check out the{" "}
+            center.
+            <br />Also check out the{" "}
             <a
               href="/sample"
               className="font-medium text-blue-600 hover:underline dark:text-blue-400"
             >
               Sample Page
+            </a>.
+            <br />Also check out the{" "}
+            <a
+              href="/login"
+              className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Login Page
             </a>.
           </p>
         </div>
